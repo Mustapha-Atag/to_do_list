@@ -1,43 +1,57 @@
-<?php 
+<?php
 	require('config/config.php');
 	require('config/db_config.php');
-	
+
+	if (isset($_POST['yes'])) {
+		// id of finished Task
+		$finishedTaskId =  mysqli_real_escape_string($connection, $_POST['finishedTask']);
+
+		// query
+		$query = "DELETE FROM tasks WHERE id = {$finishedTaskId}";
+
+		// finish the task
+		if (mysqli_query($connection, $query)) {
+			header('Location: '.ROOT_URL);
+		} else {
+			echo 'somthing goes wrong, error : '.mysqli_error($connection);
+		}
+	}
+
+	$id = mysqli_real_escape_string($connection, $_GET['id']);
+
+	// query
+	$query1 = 'SELECT * FROM tasks WHERE id ='.$id;
+
+	// getting results
+	$result = mysqli_query($connection, $query1);
+
+	// fetch data
+	$task = mysqli_fetch_assoc($result);
+
+	// free the result
+	mysqli_free_result($result);
+
+	// close the connection
+	mysqli_close($connection);
+
+
 ?>
 
 
-
-<?php include('include/header.php') ?> 
-	<br>
+<?php include('include/header.php') ?>
 	<div class="container">
-		<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
-			<div class="form-group">
-				<label>task name</label>
-				<input type="text" name="taskName" class="form-control" value="" placeholder="task name">
+		<div class="card" style="max-width: 40em; margin: 10px">
+			<div class="card-body">
+				<p class="card-text">Are you sure you finished the task?</p>
+				<div style="display : flex">
+					<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>" style="margin : 0.5em">
+						<input type="hidden" name="finishedTask" value="<?php echo $task['id']; ?>">
+						<input type="submit" name="yes" value="yes" class="btn btn-danger">
+					</form>
+					<a href="<?php echo ROOT_URL?>" class="btn btn-primary" style="margin: 0.5em">no</a>
+				</div>
 			</div>
-			<div class="form-group">
-				<label>task description</label>
-				<textarea name="description" class="form-control"></textarea>
-			</div>
-			<div class="form-group">
-				<label>deadline date</label>
-				<input type="date" name="deadLineDate" class="form-control" value="">
-			</div>
-			<div class="form-group">
-				<label>task importance</label>
-				<br>
-				<select class="form-select" name="importance" 
-				aria-label="Default select example">
-				  <option selected>...</option>
-				  <option value="1">not important task</option>
-				  <option value="2">small task</option>
-				  <option value="3">important task</option>
-				  <option value="4">very important task</option>
-				</select>
-				<br>
-				<small>if you don't choose an option, the task will be considired as a not important task</small>
-			</div>
-			<br>
-			<input type="submit" name="submit" value="edit" class="btn btn-success">
-		</form>
- 	</div>
- <?php include('include/footer.php') ?>
+		</div>
+	</div>
+<?php include('include/footer.php') ?> 
+

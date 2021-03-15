@@ -20,14 +20,14 @@
 	<div class="container">
 		<h3>Task to do</h3>
 		<?php foreach($tasks as $task): ?>
-			<div class="card <?php echo $task['id']%2 == 0 ? '' : 'text-white bg-secondary' ?>" style="margin : 10px">
+			<div class="card text-white bg-secondary" style="margin : 10px">
 			  <div class="card-body">
 			    <h4 class="card-title"><?php echo $task['taskName'] ?></h4>
 			    <h6 class="card-subtitle mb-2">Created at : <?php echo $task['createdAt'] ?></h6>
 			    <p class="card-text"><?php echo $task['description'] ?></p>
 			    <p class="">should be done at : <?php echo $task['deadLineDate'] ?></p>
-			    <a href="<?php echo ROOT_URL ?>finishTask.php?id=<?php echo $task['id']; ?>" class="card-link">edit the task</a>
-			    <a href="#" class="card-link">finish the task</a>
+			    <a href="<?php echo ROOT_URL ?>editTask.php?id=<?php echo $task['id']; ?>" class="card-link">edit the task</a>
+			    <a href="<?php echo ROOT_URL ?>finishTask.php?id=<?php echo $task['id']; ?>" class="card-link">finish the task</a>
 			  </div>
 			</div>
 		<?php endforeach; ?>
